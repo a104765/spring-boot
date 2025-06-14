@@ -1,10 +1,14 @@
 package com.example.spring_boot.dto;
 
+import jakarta.persistence.Column;
+
 import java.math.BigDecimal;
 
 public class cardFundsChange {
 
     private Long id;
+
+    @Column(precision = 10, scale = 2)
     private BigDecimal remainingBalance;
 
 

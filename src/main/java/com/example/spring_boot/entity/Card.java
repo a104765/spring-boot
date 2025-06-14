@@ -1,10 +1,14 @@
 package com.example.spring_boot.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
+
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 public class Card {
@@ -17,37 +21,48 @@ public class Card {
     @Column(precision = 10, scale = 2)
     private BigDecimal balance;
 
-    private LocalDateTime createdAt;
+    @CreationTimestamp
+    @Column(updatable = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @JsonFormat(
+            shape = JsonFormat.Shape.STRING,
+            pattern = "yyyy-MM-dd'T'HH:mm:ssX",
+            timezone = "UTC"
+    )
+    private Instant createdAt;
 
 
+    @JsonIgnore
+    @Version
+    private Long version;
 
     // Getters
     public Long getId() {
         return id;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = LocalDateTime.now();
+    public String getCardholderName() {
+        return cardholderName;
     }
 
     public BigDecimal  getBalance() {
         return balance;
     }
 
-
+    public Long getVersion() {
+        return version;
+    }
 
     //Setters
     public void setBalance(BigDecimal  balance) {
         this.balance = balance;
     }
 
-    public String getCardholderName() {
-        return cardholderName;
-    }
+
 
     public void setCardholderName(String cardholderName) {
         this.cardholderName = cardholderName;

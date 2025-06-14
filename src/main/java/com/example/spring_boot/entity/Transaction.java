@@ -1,5 +1,6 @@
 package com.example.spring_boot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -12,12 +13,14 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(precision = 10, scale = 2)
     private BigDecimal amount;
 
     private String type;
 
     private LocalDateTime timestamp;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "card_id", nullable = false)  // Creates FK to Card.id
     private Card card;

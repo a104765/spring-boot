@@ -7,7 +7,6 @@ import com.example.spring_boot.entity.Transaction;
 import com.example.spring_boot.service.card.CardService;
 import com.example.spring_boot.service.transaction.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
@@ -47,16 +46,8 @@ public class CardController {
         transaction.setType("spend");
         BigDecimal orgAmount = cardService.getCard(cardId).getBalance();
         Card card = cardService.transactionCard(cardId, transaction);
-
-        if (orgAmount.compareTo(card.getBalance()) > 0) {
-            //Checks if card has new balance. If yes, it means that spend was ok. If not, it means that there are no funds.
-            cardFundsChange response = new cardFundsChange(card.getId(), card.getBalance());
-            return ResponseEntity.ok(response);
-        }
-        else{
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        }
-
+        cardFundsChange response = new cardFundsChange(card.getId(), card.getBalance());
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/cards/{id}/topup")
